@@ -9,6 +9,30 @@ app = FastAPI()
 cred_path = "credentials.json"
 db = firestore.Client.from_service_account_json(cred_path)
 
+
+
+@app.get("/getTrips")
+async def get_trips(delivery_id: str = None):
+    try:
+        trips_ref = db.collection("trips")
+
+        if delivery_id:
+            # Retrieve the trip with the specified delivery_id
+            query = trips_ref.where("delivery_id", "==", delivery_id)
+            trips = query.stream()
+        else:
+            # Retrieve all trips if no delivery_id is provided
+            trips = trips_ref.stream()
+
+        # Convert Firestore documents to a list of dictionaries
+        trip_list = [trip.to_dict() for trip in trips]
+
+        return {"trips": trip_list}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.post("/postTrip")
 async def post_trip(trip_data: dict):
     try:
@@ -24,6 +48,30 @@ async def post_trip(trip_data: dict):
         trips_ref.add(trip_data)
 
         return {"message": "Trip data successfully stored in Firestore"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/getLocations")
+async def get_locations(prices: str = None, weight: str = None, location: str = None):
+    try:
+        trips_ref = db.collection("trips")
+
+        # Apply filters based on the provided parameters
+        if prices:
+            trips_ref = trips_ref.where("price", "==", prices)
+        if weight:
+            trips_ref = trips_ref.where("weight", "==", weight)
+        if location:
+            trips_ref = trips_ref.where("location", "==", location)
+
+        # Retrieve the filtered trips
+        trips = trips_ref.stream()
+
+        # Convert Firestore documents to a list of dictionaries
+        trip_list = [trip.to_dict() for trip in trips]
+
+        return {"trips": trip_list}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
