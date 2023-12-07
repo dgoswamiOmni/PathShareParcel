@@ -1,0 +1,28 @@
+{
+    "_id":{
+       "$oid":"656cee2fd4ade85d41a60744"
+    },
+    "delivery_id":"BRP-12345",
+    "user_id":"1234567",
+    "delivery_address":{
+       "name":"John Doe",
+       "address":"Plymouth xyz"
+    },
+    "location":{
+       "name":"Exeter",
+       "lat":"322",
+       "long":"213"
+    },
+    "max_weight":"50",
+    "size":{
+       "length":"56",
+       "breadth":"45"
+    },
+    "weight":"43",
+    "price":"34",
+    "pickup_point":{
+       "name":"Plymouth",
+       "lat":"234",
+       "long":"213"
+    }
+ }

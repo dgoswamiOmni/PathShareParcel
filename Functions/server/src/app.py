@@ -11,29 +11,9 @@ db = firestore.Client.from_service_account_json(cred_path)
 
 
 
-@app.get("/getTrips")
-async def get_trips(delivery_id: str = None):
-    try:
-        trips_ref = db.collection("trips")
+# shipper section
 
-        if delivery_id:
-            # Retrieve the trip with the specified delivery_id
-            query = trips_ref.where("delivery_id", "==", delivery_id)
-            trips = query.stream()
-        else:
-            # Retrieve all trips if no delivery_id is provided
-            trips = trips_ref.stream()
-
-        # Convert Firestore documents to a list of dictionaries
-        trip_list = [trip.to_dict() for trip in trips]
-
-        return {"trips": trip_list}
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.post("/postTrip")
+@app.post("/ShipperPostTrip")
 async def post_trip(trip_data: dict):
     try:
         # Validate that the required keys are present in the received JSON
@@ -52,7 +32,28 @@ async def post_trip(trip_data: dict):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/getLocations")
+@app.get("/ShipperGetTrips")
+async def shipper_past_trips(user_id: str):
+    try:
+        trips_ref = db.collection("trips")
+
+        # Retrieve all trips for the specified user_id
+        query = trips_ref.where("user_id", "==", user_id)
+        trips = query.stream()
+
+        # Convert Firestore documents to a list of dictionaries
+        trip_list = [trip.to_dict() for trip in trips]
+
+        return {"past_trips": trip_list}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+# receiver section
+
+@app.get("/ReceiverGetTrips")
 async def get_locations(prices: str = None, weight: str = None, location: str = None):
     try:
         trips_ref = db.collection("trips")
@@ -75,6 +76,32 @@ async def get_locations(prices: str = None, weight: str = None, location: str = 
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+
+@app.get("/ReceiverSelectTrip")
+async def get_trips(delivery_id: str = None):
+    try:
+        trips_ref = db.collection("trips")
+
+        if delivery_id:
+            # Retrieve the trip with the specified delivery_id
+            query = trips_ref.where("delivery_id", "==", delivery_id)
+            trips = query.stream()
+        else:
+            # Retrieve all trips if no delivery_id is provided
+            trips = trips_ref.stream()
+
+        # Convert Firestore documents to a list of dictionaries
+        trip_list = [trip.to_dict() for trip in trips]
+
+        return {"trips": trip_list}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+#receiver page
+
 
 if __name__ == "__main__":
     import uvicorn
