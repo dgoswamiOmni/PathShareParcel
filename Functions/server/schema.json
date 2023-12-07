@@ -1,28 +1,40 @@
 {
-    "_id":{
-       "$oid":"656cee2fd4ade85d41a60744"
-    },
-    "delivery_id":"BRP-12345",
-    "user_id":"1234567",
-    "delivery_address":{
+    "shipper_data":{
        "name":"John Doe",
-       "address":"Plymouth xyz"
+       "user_id":"123456789",
+       "delivery_id":"BRP-12345",
+       "shipper_from_location":{
+          "name":"Exeter",
+          "lat":"322",
+          "long":"213"
+       },
+       "shipper_to_location":{
+          "name":"Plymouth",
+          "lat":"322",
+          "long":"213"
+       },
+       "max_permissible_weight":"50",
+       "max_permissible_size":{
+          "length":"56",
+          "breadth":"45"
+       },
+       "price_per_kg":"69",
+       "arrival_date":"2023-12-07"
     },
-    "location":{
-       "name":"Exeter",
-       "lat":"322",
-       "long":"213"
-    },
-    "max_weight":"50",
-    "size":{
-       "length":"56",
-       "breadth":"45"
-    },
-    "weight":"43",
-    "price":"34",
-    "pickup_point":{
-       "name":"Plymouth",
-       "lat":"234",
-       "long":"213"
+    "receiver_data":{
+       "receiver_name":"James Bond",
+       "user_id":"012345",
+       "receiver_pickup_point":{
+          "name":"Plymouth",
+          "lat":"234",
+          "long":"213"
+       },
+       "receiver_delivery_point":{
+          "name":"Plymouth",
+          "lat":"234",
+          "long":"213"
+       },
+       "item_information":[
+       ]
     }
  }
