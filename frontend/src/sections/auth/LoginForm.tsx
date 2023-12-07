@@ -20,6 +20,8 @@ import { VisibilityOff, Visibility } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 // components
 import FormProvider, { RHFTextField } from "../../components/hook-form";
+// auth
+import { useAuthContext } from '../../auth/useAuthContext';
 
 type FormValuesProps = {
 	email: string;
@@ -28,6 +30,8 @@ type FormValuesProps = {
 };
 
 export default function LoginForm() {
+	const { login } = useAuthContext();
+
 	const [showPassword, setShowPassword] = useState(false);
 
 	// login form fields validation
@@ -56,12 +60,25 @@ export default function LoginForm() {
 		formState: { errors, isSubmitting, isSubmitSuccessful },
 	} = methods;
 
+	const onLogin = async (data: FormValuesProps) => {
+		try {
+			await login(data.email, data.password);
+		} catch (error) {
+			console.error(error);
+			reset();
+			setError("afterSubmit", {
+				...error,
+				message: error.message,
+			});
+		}
+	};
+
 	return (
 		<Card sx={{ p: 3, width: 350 }}>
 			<Typography variant='h5' sx={{ mb: 2 }}>
 				Login
 			</Typography>
-			<FormProvider methods={methods}>
+			<FormProvider methods={methods} onSubmit={handleSubmit(onLogin)}>
 				<Stack gap={2}>
 					{!!errors.afterSubmit && (
 						<Alert severity='error'>{errors.afterSubmit.message}</Alert>
@@ -101,7 +118,7 @@ export default function LoginForm() {
 							to={PATH_AUTH.register}
 							variant='body2'
 							underline='always'>
-							Login
+							Register
 						</Link>
 					</Typography>
 				</Stack>

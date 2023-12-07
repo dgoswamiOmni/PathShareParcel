@@ -20,6 +20,8 @@ import { VisibilityOff, Visibility } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 // components
 import FormProvider, { RHFTextField } from "../../components/hook-form";
+// auth
+import { useAuthContext } from '../../auth/useAuthContext';
 
 type FormValuesProps = {
 	email: string;
@@ -30,6 +32,8 @@ type FormValuesProps = {
 };
 
 export default function RegisterForm() {
+	const { register } = useAuthContext();
+
 	const [showPassword, setShowPassword] = useState(false);
 
 	// register form fields validation
@@ -62,12 +66,28 @@ export default function RegisterForm() {
 		formState: { errors, isSubmitting, isSubmitSuccessful },
 	} = methods;
 
+	const onRegister = async (data: FormValuesProps) => {
+		try {
+			const { email, password, firstName, lastName } = data;
+			if (register) {
+				await register(email, password, firstName, lastName);
+			}
+		} catch (error) {
+			console.error(error);
+			reset();
+			setError("afterSubmit", {
+				...error,
+				message: error.message,
+			});
+		}
+	};
+
 	return (
 		<Card sx={{ p: 3, width: 350 }}>
 			<Typography variant='h5' sx={{ mb: 2 }}>
 				Register
 			</Typography>
-			<FormProvider methods={methods}>
+			<FormProvider methods={methods} onSubmit={handleSubmit(onRegister)}>
 				<Stack gap={2}>
 					{!!errors.afterSubmit && (
 						<Alert severity='error'>{errors.afterSubmit.message}</Alert>

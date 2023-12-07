@@ -7,11 +7,11 @@ import ThemeProvider from "./theme";
 
 function App() {
 	return (
-		// <AuthProvider>
-		<ThemeProvider>
-			<Router />
-		</ThemeProvider>
-		// </AuthProvider>
+		<AuthProvider>
+			<ThemeProvider>
+				<Router />
+			</ThemeProvider>
+		</AuthProvider>
 	);
 }
 
