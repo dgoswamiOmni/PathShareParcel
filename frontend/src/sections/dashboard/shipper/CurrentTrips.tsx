@@ -1,21 +1,8 @@
-import {
-	useState,
-	useCallback,
-	KeyboardEvent,
-	MouseEvent,
-	ElementType,
-} from "react";
+import { useState, useCallback, KeyboardEvent, MouseEvent } from "react";
 import moment from "moment";
+import axios from "axios";
 // mui
-import {
-	Box,
-	Button,
-	Stack,
-	Typography,
-	Drawer,
-	TextFieldProps,
-	Alert,
-} from "@mui/material";
+import { Box, Button, Stack, Typography, Drawer, Alert } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import AddIcon from "@mui/icons-material/Add";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
@@ -82,9 +69,54 @@ export default function CurrentTrips({
 		formState: { errors, isSubmitting, isSubmitSuccessful },
 	} = methods;
 
+	// Handle clicking 'Add New Trip'
 	const onSubmitTrip = async (data: FormValuesProps) => {
-		console.log(data);
-		// TODO: implement data post
+		try {
+			const { tripDate, aboutTrip, from, to, maxWeight, pricePerKg } = data;
+
+			const postData = {
+				shipper_data: {
+					name: "John Doe",
+					user_id: "112233445",
+					delivery_id: "BRP-12345",
+					shipper_from_location: {
+						name: from,
+						lat: "322",
+						long: "213",
+					},
+					shipper_to_location: {
+						name: to,
+						lat: "322",
+						long: "213",
+					},
+					max_permissible_weight: maxWeight,
+					max_permissible_size: {
+						length: "56",
+						breadth: "45",
+					},
+					price_per_kg: pricePerKg,
+					arrival_date: (tripDate as moment.Moment).format("YYYY-MM-DD"),
+				},
+			};
+
+			await axios
+				.post(
+					"https://pathshare-g2jarsb23q-nw.a.run.app/ShipperPostTrip",
+					postData,
+				)
+				.then((res) => {
+					if (res.status === 200) {
+						window.location.reload();
+					}
+				});
+		} catch (error) {
+			console.error(error);
+			reset();
+			setError("afterSubmit", {
+				...error,
+				message: error.message,
+			});
+		}
 	};
 
 	return (
@@ -116,6 +148,7 @@ export default function CurrentTrips({
 						pricePerKg={trip.shipper_data.price_per_kg}
 						shipperName={trip.shipper_data.name}
 						key={trip.shipper_data.name}
+						archived={true}
 					/>
 				))}
 			</Stack>
@@ -189,7 +222,7 @@ export default function CurrentTrips({
 									variant='contained'
 									size='large'
 									loading={isSubmitSuccessful || isSubmitting}>
-									Confirm Trip
+									Add New Trip
 								</LoadingButton>
 							</Box>
 						</Stack>

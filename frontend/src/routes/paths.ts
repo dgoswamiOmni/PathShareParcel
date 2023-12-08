@@ -4,7 +4,6 @@ function path(root: string, sublink: string) {
 }
 
 const ROOT_AUTH = "/auth";
-const ROOT_DASHBOARD = "/dashboard";
 
 export const PATH_AUTH = {
 	root: ROOT_AUTH,
@@ -13,8 +12,7 @@ export const PATH_AUTH = {
 };
 
 export const PATH_DASHBOARD = {
-	root: ROOT_DASHBOARD,
-	shipper: path(ROOT_DASHBOARD, "/shipper"),
-	receiver: path(ROOT_DASHBOARD, "/receiver"),
-	profile: path(ROOT_DASHBOARD, "/profile"),
+	shipper: "/shipper",
+	receiver: "/receiver",
+	profile: "/profile",
 };

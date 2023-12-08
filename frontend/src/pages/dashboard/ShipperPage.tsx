@@ -3,12 +3,12 @@ import axios from "axios";
 import moment from "moment";
 // mui
 import { Box, Tabs, Tab, Stack } from "@mui/material";
-// components
-import { CurrentTrips, ArchivedTrips } from "../../sections/dashboard/shipper";
+// sections
+import { CurrentTrips, ArchivedTrips, Requests } from "../../sections/dashboard/shipper";
 // auth
 import { useAuthContext } from "../../auth/useAuthContext";
 // types
-import { IShipperData } from "../../types/TripData.types";
+import { IReceiverData, IShipperData } from "../../types/TripData.types";
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -41,12 +41,18 @@ function a11yProps(index: number) {
 export default function ShipperPage() {
 	const { user } = useAuthContext();
 
+	// @ts-ignore
+	const { uid } = user;
+
 	const [value, setValue] = useState(0);
 	const [currentShipperTrips, setShipperCurrentTrips] = useState<
 		{ shipper_data: IShipperData }[]
 	>([]);
 	const [pastShipperTrips, setPastShipperTrips] = useState<
 		{ shipper_data: IShipperData }[]
+	>([]);
+	const [currentShipperRequests, setCurrentShipperRequests] = useState<
+		{ receiver_data: IReceiverData }[]
 	>([]);
 
 	const handleTabChange = (event: SyntheticEvent, newValue: number) => {
@@ -61,20 +67,26 @@ export default function ShipperPage() {
 				)
 				.then((res) => {
 					if (res.status === 200) {
+						// @ts-ignore
 						const currentTrips = res.data.past_trips.filter((trip) =>
 							moment(trip.shipper_data.arrival_date, "YYYY-MM-DD").isAfter(
 								moment(),
 							),
 						);
-
+						// @ts-ignore
 						const pastTrips = res.data.past_trips.filter((trip) =>
 							moment(trip.shipper_data.arrival_date, "YYYY-MM-DD").isBefore(
 								moment(),
 							),
 						);
+						// @ts-igonote
+						const currentRequest = res.data.past_trips.filter(
+							(trip) => trip.receiver_data,
+						);
 
 						setShipperCurrentTrips(currentTrips);
 						setPastShipperTrips(pastTrips);
+						setCurrentShipperRequests(currentRequest);
 					}
 				});
 		} catch (error) {
@@ -91,6 +103,7 @@ export default function ShipperPage() {
 			<Box>
 				<Tabs value={value} onChange={handleTabChange}>
 					<Tab label='Current' {...a11yProps(0)} />
+					<Tab label='Requests' {...a11yProps(0)} />
 					<Tab label='Archive' {...a11yProps(1)} />
 				</Tabs>
 			</Box>
@@ -101,6 +114,10 @@ export default function ShipperPage() {
 
 			<CustomTabPanel index={1} value={value}>
 				<ArchivedTrips shipperCurrentTripsData={pastShipperTrips} />
+			</CustomTabPanel>
+
+			<CustomTabPanel index={1} value={value}>
+				<Requests shipperCurrentTripsRequests={currentShipperRequests} />
 			</CustomTabPanel>
 		</Box>
 	);

@@ -3,7 +3,7 @@ export interface ITripData {
 	receiver_data: IReceiverData;
 }
 
-interface IReceiverData {
+export interface IReceiverData {
 	receiver_name: string;
 	user_id: string;
 	receiver_pickup_point: Location;
