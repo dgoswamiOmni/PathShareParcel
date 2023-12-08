@@ -79,8 +79,8 @@ export default function ShipperPage() {
 								moment(),
 							),
 						);
-						// @ts-igonote
 						const currentRequest = res.data.past_trips.filter(
+							// @ts-ignore
 							(trip) => trip.receiver_data,
 						);
 
