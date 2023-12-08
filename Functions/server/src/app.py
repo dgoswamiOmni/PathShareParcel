@@ -1,9 +1,17 @@
 from fastapi import FastAPI, HTTPException
-from fastapi.param_functions import Query
+from fastapi.middleware.cors import CORSMiddleware
 from google.cloud import firestore
 
 app = FastAPI()
 
+# Add CORS middleware to allow all origins
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Replace with your frontend's actual origin
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # Replace with your own Firestore credentials file path
 cred_path = "credentials.json"
 db = firestore.Client.from_service_account_json(cred_path)
