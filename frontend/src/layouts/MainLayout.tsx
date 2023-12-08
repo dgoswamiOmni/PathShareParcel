@@ -8,6 +8,7 @@ import { useAuthContext } from "../auth/useAuthContext";
 export default function MainLayout() {
 	const { user } = useAuthContext();
 
+	// @ts-ignore
 	const { displayName } = user;
 
 	return (

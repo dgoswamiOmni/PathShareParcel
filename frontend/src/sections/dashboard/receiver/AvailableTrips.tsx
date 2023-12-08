@@ -12,6 +12,7 @@ import {
 	Divider,
 	Button,
 } from "@mui/material";
+import axios from "axios";
 // components
 import { ReceiverTripCard, IconWeight, IconPoint } from "../../../components";
 // assets
@@ -43,13 +44,49 @@ export default function AvailableTrips({
 		[],
 	);
 
-	const handleTripSelect = useCallback(
-		(tripData: ITripData) => {
-			setSelectedTrip(tripData);
-			setDrawerOpen(true); // Call toggleDrawer to open the drawer
-		},
-		[setDrawerOpen],
-	);
+	// Handle Clicking 'Book This Trip' button
+	const handleTripSelect = useCallback((tripData: ITripData) => {
+		setSelectedTrip(tripData);
+		setDrawerOpen(true); // Call toggleDrawer to open the drawer
+	}, []);
+
+	// Handle clicking 'Confirm Booking' button
+	const handleConfirmBooking = useCallback(async () => {
+		try {
+			// MOck data
+			const postData = {
+				receiver_data: {
+					delivery_id: selectedTrip?.shipper_data.delivery_id,
+					item_information: ["item1", "item2", "item3"],
+					receiver_delivery_point: {
+						name: selectedTrip?.shipper_data.shipper_to_location.name,
+						lat: "",
+						long: "",
+					},
+					receiver_name: "John Doe",
+					receiver_pickup_point: {
+						name: selectedTrip?.shipper_data.shipper_to_location.name,
+						lat: "",
+						long: "",
+					},
+					user_id: "1242741",
+				},
+			};
+
+			await axios
+				.post(
+					`https://pathshare-g2jarsb23q-nw.a.run.app/ReceiverSelectTrip/${selectedTrip?.shipper_data.delivery_id}`,
+					postData,
+				)
+				.then((res) => {
+					if (res.status === 200) {
+						window.location.reload();
+					}
+				});
+		} catch (error) {
+			console.error(error);
+		}
+	}, []);
 
 	return (
 		<Box sx={{ maxHeight: "600px", overflowY: "auto" }}>
@@ -179,7 +216,11 @@ export default function AvailableTrips({
 						</Box>
 
 						<Box>
-							<Button fullWidth variant='contained' size='large'>
+							<Button
+								fullWidth
+								variant='contained'
+								size='large'
+								onClick={handleConfirmBooking}>
 								Confirm Booking
 							</Button>
 						</Box>

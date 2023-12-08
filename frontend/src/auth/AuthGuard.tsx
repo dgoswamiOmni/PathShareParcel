@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 // components
 import { LoadingScreen } from "../components";
-//
-import Login from "../pages/auth/LoginPage";
+// auth
 import { useAuthContext } from "./useAuthContext";
 
 // ----------------------------------------------------------------------
@@ -29,7 +28,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
 		if (pathname !== requestedLocation) {
 			setRequestedLocation(pathname);
 		}
-		return <Login />;
+		return <Navigate to='/auth/login' replace />;
 	}
 
 	if (requestedLocation && pathname !== requestedLocation) {
