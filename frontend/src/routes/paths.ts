@@ -14,7 +14,7 @@ export const PATH_AUTH = {
 
 export const PATH_DASHBOARD = {
 	root: ROOT_DASHBOARD,
-	selectRole: path(ROOT_DASHBOARD, "/select-role"),
 	shipper: path(ROOT_DASHBOARD, "/shipper"),
 	receiver: path(ROOT_DASHBOARD, "/receiver"),
+	profile: path(ROOT_DASHBOARD, "/profile"),
 };

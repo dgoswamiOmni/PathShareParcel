@@ -18,12 +18,12 @@ export const RegisterPage = Loadable(
 	lazy(() => import("../pages/auth/RegisterPage")),
 );
 // Dashboard pages
-export const SelectRolePage = Loadable(
-	lazy(() => import("../pages/dashboard/SelectRolePage")),
-);
 export const ShipperPage = Loadable(
 	lazy(() => import("../pages/dashboard/ShipperPage")),
 );
 export const ReceiverPage = Loadable(
 	lazy(() => import("../pages/dashboard/ReceiverPage")),
 );
+export const ProfilePage = Loadable(
+	lazy(() => import('../pages/dashboard/ProfilePage'))
+)

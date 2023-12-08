@@ -4,12 +4,17 @@ import Router from "./routes";
 import { AuthProvider } from "./auth/FirebaseContext";
 // theme
 import ThemeProvider from "./theme";
+// mui
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterMoment} from '@mui/x-date-pickers/AdapterMoment'
 
 function App() {
 	return (
 		<AuthProvider>
 			<ThemeProvider>
-				<Router />
+				<LocalizationProvider dateAdapter={AdapterMoment}>
+					<Router />
+				</LocalizationProvider>
 			</ThemeProvider>
 		</AuthProvider>
 	);
