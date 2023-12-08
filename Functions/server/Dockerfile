@@ -14,7 +14,7 @@ RUN pip install --trusted-host pypi.python.org -r requirements.txt
 EXPOSE 8080
 
 # Define environment variable
-ENV GOOGLE_APPLICATION_CREDENTIALS=/credentials.json
+ENV GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
 
 # Run app.py when the container launches
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "src.app:app", "--host", "0.0.0.0", "--port", "8080"]
