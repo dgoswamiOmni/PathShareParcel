@@ -10,7 +10,7 @@ import GuestGuard from "../auth/GuestGuard";
 import {
 	LoginPage,
 	RegisterPage,
-	SelectRolePage,
+	ProfilePage,
 	ShipperPage,
 	ReceiverPage,
 } from "./element";
@@ -41,14 +41,6 @@ const router = createBrowserRouter([
 					</GuestGuard>
 				),
 			},
-			{
-				path: "login-unprotected",
-				element: <LoginPage />,
-			},
-			{
-				path: "register-unprotected",
-				element: <RegisterPage />,
-			},
 		],
 	},
 	{
@@ -60,9 +52,9 @@ const router = createBrowserRouter([
 		),
 		children: [
 			{ element: <Navigate to={ROUTE_AFTER_LOGIN} replace />, index: true },
-			{ path: "select-role", element: <SelectRolePage /> },
 			{ path: "shipper", element: <ShipperPage /> },
 			{ path: "receiver", element: <ReceiverPage /> },
+			{ path: "profile", element: <ProfilePage /> },
 		],
 	},
 	{ path: "*", element: <Navigate to='/404' replace /> },
